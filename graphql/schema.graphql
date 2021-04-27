@@ -1,0 +1,46 @@
+type Coin {
+  symbol: String
+  name: String
+  rank: String
+  price_usd: String
+}
+
+type WorkOrder {
+  id: ID!
+  name: String!
+  completed: Boolean!
+}
+
+input WorkOrderInput {
+  id: ID!
+  name: String!
+  completed: Boolean!
+}
+
+input UpdateWorkOrderInput {
+  id: ID!
+  name: String
+  completed: Boolean
+}
+
+type Query {
+  getWorkOrderById(workOrderId: String!): WorkOrder
+  listWorkOrders: [WorkOrder]
+  listCoinsJSON: AWSJSON
+  listCoins(limit: Int, start: Int):[Coin]
+}
+
+type Mutation {
+  createWorkOrder(workOrder: WorkOrderInput!): WorkOrder
+  updateWorkOrder(workOrder: UpdateWorkOrderInput!): WorkOrder
+  deleteWorkOrder(workOrderId: String!): String
+}
+
+type Subscription {
+  onCreateWorkOrder: WorkOrder
+    @aws_subscribe(mutations: ["createWorkOrder"])
+  onDeleteWorkOrder: String
+    @aws_subscribe(mutations: ["deleteWorkOrder"])
+  onUpdateWorkOrder: WorkOrder
+    @aws_subscribe(mutations: ["updateWorkOrder"])
+}
